@@ -60,9 +60,9 @@ const AdminTaskDetails = () => {
       <Typography variant="h4" fontWeight="bold" gutterBottom>{task.title}</Typography>
       <Typography sx={{ mb: 3 }}>{task.description}</Typography>
 
-      <Typography variant="h6" fontWeight="bold" sx={{ mt: 4 }}>📥 Сабмиттер</Typography>
+      <Typography variant="h6" fontWeight="bold" sx={{ mt: 4 }}>📥 Жауаптар</Typography>
       {submissions.length === 0 ? (
-        <Typography color="textSecondary">Сабмиттер жоқ</Typography>
+        <Typography color="textSecondary">Жауаптар жоқ</Typography>
       ) : (
         <Grid container spacing={2}>
           {submissions.map((sub) => (
