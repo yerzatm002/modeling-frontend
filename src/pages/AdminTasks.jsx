@@ -55,7 +55,7 @@ const AdminTasks = () => {
                   sx={{ backgroundColor: "black" }}
                   onClick={() => navigate(`/admin/tasks/${task.id}`)}
                 >
-                  Сабмиттерді көру
+                  Жауаптарды көру
                 </Button>
               </CardContent>
             </Card>

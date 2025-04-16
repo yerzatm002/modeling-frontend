@@ -13,7 +13,7 @@ const Home = () => {
         ModelMaster бағдарламасына қош келдіңіз!
       </Typography>
       <Typography variant="h6" sx={{ color: "#555", mt: 1 }}>
-        3D модельдеу және 3D басып шығару әлеміне сіздің шлюзіңіз
+       3D модельдеу мен 3D басып шығаруға бастайтын жол!
       </Typography>
       
       {/* Кнопка "Бастау" */}
@@ -29,6 +29,7 @@ const Home = () => {
           borderRadius: "20px",
           "&:hover": { backgroundColor: "#333" }
         }}
+        onClick={() => navigate("/login")}
       >
         Бастау
       </Button>
