@@ -32,7 +32,7 @@ const Header = () => {
     <AppBar position="static" sx={{ backgroundColor: "#dce600" }}>
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1, color: "black" }}>
-          ModelMaster
+        3D Qadam
         </Typography>
 
         {user?.role === "ADMIN" ? renderAdminLinks() : renderUserLinks()}

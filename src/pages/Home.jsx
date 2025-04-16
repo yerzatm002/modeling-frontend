@@ -10,7 +10,7 @@ const Home = () => {
     <Container maxWidth="lg" sx={{ textAlign: "center", mt: 4 }}>
       {/* Заголовок и описание */}
       <Typography variant="h3" fontWeight="bold" sx={{ color: "#333" }}>
-        ModelMaster бағдарламасына қош келдіңіз!
+      3D Qadam курсына қош келдіңіз!
       </Typography>
       <Typography variant="h6" sx={{ color: "#555", mt: 1 }}>
        3D модельдеу мен 3D басып шығаруға бастайтын жол!
