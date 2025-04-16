@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Базовый URL сервера
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://modeling-backend-bwx3.onrender.com/api";
 
 // Создаем экземпляр Axios
 const api = axios.create({
