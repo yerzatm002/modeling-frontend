@@ -71,7 +71,7 @@ const AdminDashboard = () => {
             <TableCell>Аты</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Рөлі</TableCell>
-            <TableCell>Тіркелген күні</TableCell>
+            {/* <TableCell>Тіркелген күні</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
               <TableCell>{user.firstName} {user.lastName}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role}</TableCell>
-              <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+              {/* <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>
