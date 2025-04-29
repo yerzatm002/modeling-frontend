@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "react-router-dom";
 import {
   Container, Typography, Box, CircularProgress,
-  Card, CardContent, Button, Grid
+  Card, CardContent, Button, Grid, LinearProgress
 } from "@mui/material";
 import {
-  getLessonById, getTasksByLesson, getQuizzesByLesson, submitQuizAnswer 
+  getLessonById, getTasksByLesson, getQuizzesByLesson, getUserProgress, submitQuizAnswer, saveUserProgress
 } from "../api/api";
 
 const LessonDetails = () => {
@@ -18,6 +18,7 @@ const LessonDetails = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [feedback, setFeedback] = useState({});
+  const [progress, setProgress] = useState({});
   const [showResult, setShowResult] = useState(false);
 
 
@@ -27,9 +28,15 @@ const LessonDetails = () => {
         const lessonData = await getLessonById(id);
         const taskData = await getTasksByLesson(id);
         const quizData = await getQuizzesByLesson(id);
+        const userProgress = await getUserProgress();
         setLesson(lessonData);
+        console.log(lessonData);
         setTasks(taskData);
         setQuizzes(quizData);
+        setProgress(userProgress.reduce((acc, item) => {
+          acc[item.lessonId] = item.completed;
+          return acc;
+        }, {}));
       } catch (err) {
         console.error("Деректерді жүктеу қатесі", err);
       } finally {
@@ -46,7 +53,7 @@ const LessonDetails = () => {
       setShowResult(true);
     }
   };
-  
+
   const handleAnswer = async (quizId, selected) => {
     try {
       const res = await submitQuizAnswer(quizId, selected);
@@ -57,6 +64,11 @@ const LessonDetails = () => {
       console.error("Тест қатесі", err);
     }
   };
+
+    const handleContinueCourse = async (lessonId) => {
+      await saveUserProgress({ lessonId, completed: true });
+      setProgress((prev) => ({ ...prev, [lessonId]: true }));
+    };
 
   if (loading) return <Container sx={{ mt: 5, textAlign: "center" }}><CircularProgress /></Container>;
   if (!lesson) return <Typography sx={{ mt: 4 }}>Сабақ табылмады</Typography>;
@@ -88,85 +100,94 @@ const LessonDetails = () => {
         </Box>
       )}
 
-      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>📘 Теориялық бөлім</Typography>
+      <LinearProgress variant="determinate" value={progress[lesson.id] ? 100 : 0} sx={{ mt: 2 }} />
+      <Button
+        variant="contained"
+        sx={{ mt: 2, backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
+        onClick={() => handleContinueCourse(lesson.id)}
+      >
+        {progress[lesson.id] ? "Аяқталды" : "Сабақты жалғастыру"}
+      </Button>
+      <br></br>
+      <Typography variant="h6" fontWeight="bold"  sx={{ mb: 2,  mt: 5}}>📘 Теориялық бөлім</Typography>
       <Typography sx={{ whiteSpace: "pre-line", mb: 4 }}>{lesson.theory}</Typography>
 
       <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>🧠 Мини-тест</Typography>
 
-{quizzes.length === 0 && (
-  <Typography color="textSecondary">Мини-тесттер жоқ</Typography>
-)}
+      {quizzes.length === 0 && (
+        <Typography color="textSecondary">Мини-тесттер жоқ</Typography>
+      )}
 
-{quizzes.length > 0 && !showResult && (
-  <Box>
-    <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-      {step + 1} / {quizzes.length}
-    </Typography>
+      {quizzes.length > 0 && !showResult && (
+        <Box>
+          <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+            {step + 1} / {quizzes.length}
+          </Typography>
 
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={step}
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -100 }}
-        transition={{ duration: 0.4 }}
-      >
-        <Card sx={{ borderRadius: 2, mb: 3 }}>
-          <CardContent>
-            <Typography fontWeight="bold" sx={{ mb: 1 }}>
-              {step + 1}. {quizzes[step].question}
-            </Typography>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Card sx={{ borderRadius: 2, mb: 3 }}>
+                <CardContent>
+                  <Typography fontWeight="bold" sx={{ mb: 1 }}>
+                    {step + 1}. {quizzes[step].question}
+                  </Typography>
 
-            {quizzes[step].options.map((opt, idx) => {
-              const selected = answers[quizzes[step].id] === opt.value;
-              const isCorrect = feedback[quizzes[step].id];
+                  {quizzes[step].options.map((opt, idx) => {
+                    const selected = answers[quizzes[step].id] === opt.value;
+                    const isCorrect = feedback[quizzes[step].id];
 
-              let color = "primary";
-              if (selected) {
-                color = isCorrect ? "success" : "error";
-              }
+                    let color = "primary";
+                    if (selected) {
+                      color = isCorrect ? "success" : "error";
+                    }
 
-              return (
-                <Button
-                  key={idx}
-                  variant={selected ? "contained" : "outlined"}
-                  color={color}
-                  disabled={feedback[quizzes[step].id] !== undefined}
-                  onClick={() => handleAnswer(quizzes[step].id, opt.value)}
-                  sx={{ mt: 1, mr: 1, textTransform: "none" }}
-                >
-                  {opt.value}
+                    return (
+                      <Button
+                        key={idx}
+                        variant={selected ? "contained" : "outlined"}
+                        color={color}
+                        disabled={feedback[quizzes[step].id] !== undefined}
+                        onClick={() => handleAnswer(quizzes[step].id, opt.value)}
+                        sx={{ mt: 1, mr: 1, textTransform: "none" }}
+                      >
+                        {opt.value}
+                      </Button>
+                    );
+                  })}
+                </CardContent>
+              </Card>
+
+              {feedback[quizzes[step].id] !== undefined && (
+                <Button variant="contained" onClick={handleNext}>
+                  Келесі сұрақ
                 </Button>
-              );
-            })}
-          </CardContent>
-        </Card>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </Box>
+      )}
 
-        {feedback[quizzes[step].id] !== undefined && (
-          <Button variant="contained" onClick={handleNext}>
-            Келесі сұрақ
+      {showResult && (
+        <Box sx={{ my: 4 }}>
+          <Typography variant="h6" fontWeight="bold" color="success.main">
+            ✅ Нәтиже: {Object.values(feedback).filter(Boolean).length} / {quizzes.length} дұрыс жауап
+          </Typography>
+          <Button sx={{ mt: 2 }} onClick={() => {
+            setStep(0);
+            setAnswers({});
+            setFeedback({});
+            setShowResult(false);
+          }}>
+            Қайталап өту
           </Button>
-        )}
-      </motion.div>
-    </AnimatePresence>
-  </Box>
-)}
-
-{showResult && (
-  <Box sx={{ my: 4 }}>
-    <Typography variant="h6" fontWeight="bold" color="success.main">
-      ✅ Нәтиже: {Object.values(feedback).filter(Boolean).length} / {quizzes.length} дұрыс жауап
-    </Typography>
-    <Button sx={{ mt: 2 }} onClick={() => {
-      setStep(0);
-      setAnswers({});
-      setFeedback({});
-      setShowResult(false);
-    }}>
-      Қайталап өту
-    </Button>
-  </Box>
-)}
+        </Box>
+      )}
 
 
 
@@ -190,6 +211,32 @@ const LessonDetails = () => {
       ) : (
         <Typography color="textSecondary" sx={{ mb: 4 }}>Практикалық тапсырмалар жоқ</Typography>
       )}
+
+
+      <Typography variant="h5" fontWeight="bold" align="center" gutterBottom sx={{ mt: 5 }}>
+        📝 ҚМЖ (Қысқа мерзімді сабақ жоспары)
+      </Typography>
+
+      <Box sx={{ textAlign: "center", mb: 3 }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => window.open(lesson.materialUrl, "_blank")}
+        >
+          ҚМЖ-ны жүктеу
+        </Button>
+      </Box>
+
+      <Box sx={{ mb: 5 }}>
+        <iframe
+          src={lesson.materialUrl}
+          width="100%"
+          height="600px"
+          style={{ borderRadius: "8px", border: "1px solid #ccc" }}
+          allow="autoplay"
+        ></iframe>
+      </Box>
+
     </Container>
   );
 };

@@ -46,7 +46,7 @@ const Home = () => {
           <CardContent>
             <Typography variant="h6" fontWeight="bold">Платформаға шолу</Typography>
             <Typography variant="body2" sx={{ color: "#666" }}>
-              3D модельдеу және басып шығару үшін ModelMaster пайдалану мүмкіндіктері мен артықшылықтарын ашыңыз.
+              3D модельдеу және басып шығару үшін 3D Qadam пайдалану мүмкіндіктері мен артықшылықтарын ашыңыз.
             </Typography>
           </CardContent>
         </Card>
@@ -60,9 +60,9 @@ const Home = () => {
         >
           <CardMedia component="img" height="200" image="https://spb.hse.ru/data/2023/05/19/2016081458/3HSE%20Physics30318.jpg" alt="Оқулықтар" />
           <CardContent>
-            <Typography variant="h6" fontWeight="bold">Таңдаулы оқулықтар</Typography>
+            <Typography variant="h6" fontWeight="bold">Таңдаулы сабақтар</Typography>
             <Typography variant="body2" sx={{ color: "#666" }}>
-              Оқу процесінде сізге бағыт-бағдар беруге арналған біздің қадамдық оқулықтарымызды зерттеңіз.
+              Оқу процесінде сізге бағыт-бағдар беруге арналған біздің қадамдық видео және теориялық сабақтарымызды көріңіз.
             </Typography>
           </CardContent>
         </Card>
@@ -78,7 +78,7 @@ const Home = () => {
           <CardContent>
             <Typography variant="h6" fontWeight="bold">Практикалық тапсырмалар</Typography>
             <Typography variant="body2" sx={{ color: "#666" }}>
-              Модельдеу және басып шығару тәжірибеңізді жақсарту үшін инновациялық құралдарымызды пайдаланыңыз.
+              Модельдеу және басып шығару тәжірибеңізді жақсарту үшін практикалық тапсырмаларызды пайдаланыңыз.
             </Typography>
           </CardContent>
         </Card>

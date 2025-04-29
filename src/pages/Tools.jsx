@@ -13,6 +13,24 @@ const Tools = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+
+  const simulators = [
+    {
+      title: "3D Принтер Симулятор",
+      description: "Онлайн 3D принтер жұмысын симуляциялау",
+      image: "https://i.pcmag.com/imagery/roundups/06msR0ZNV3Oc2GfpqCu9AcT-24..v1667861420.jpg",
+      link: "https://www.figuro.io/Designer",
+      buttonText: "Симуляторды бастау"
+    },
+    {
+      title: "Blender",
+      description: "Blender арқылы 3D модельдеу және анимация жасау",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcunTHEc8uX5o6yb3m6Y6E7U3Z32yVLQ-Fqg&s",
+      link: "https://www.blender.org/",
+      buttonText: "Blender ашу"
+    }
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -119,24 +137,46 @@ const Tools = () => {
       </Typography>
 
       <Grid container spacing={3} sx={{ mb: 5 }} justifyContent="center">
-        <Grid item xs={12} md={4}>
-          <Card sx={{ borderRadius: 2, boxShadow: 3, transition: "0.3s", '&:hover': { transform: "scale(1.05)" } }}>
-            <CardMedia component="img" height="200" image="https://i.pcmag.com/imagery/roundups/06msR0ZNV3Oc2GfpqCu9AcT-24..v1667861420.jpg" alt="3D Принтер Симулятор" />
-            <CardContent>
-              <Typography variant="h6" fontWeight="bold">3D Принтер Симулятор</Typography>
-              <Typography variant="body2" sx={{ color: "#666" }}>Онлайн 3D принтер жұмысын симуляциялау</Typography>
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{ mt: 2, backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
-                onClick={() => window.open("https://www.figuro.io/Designer", "_blank")}
-              >
-                Симуляторды бастау
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
+      <Grid item xs={12}>
+        <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="center" gap={4}>
+          {simulators.map((simulator, index) => (
+            <Card
+              key={index}
+              sx={{
+                width: 300,
+                borderRadius: 2,
+                boxShadow: 3,
+                transition: "0.3s",
+                '&:hover': { transform: "scale(1.05)" }
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="200"
+                image={simulator.image}
+                alt={simulator.title}
+              />
+              <CardContent>
+                <Typography variant="h6" fontWeight="bold">
+                  {simulator.title}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#666" }}>
+                  {simulator.description}
+                </Typography>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{ mt: 2, backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
+                  onClick={() => window.open(simulator.link, "_blank")}
+                >
+                  {simulator.buttonText}
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
       </Grid>
+    </Grid>
 
       <Typography variant="h5" fontWeight="bold" align="center" gutterBottom sx={{ mt: 5 }}>
         📝 Нұсқаулық (PDF)
