@@ -223,18 +223,8 @@ const LessonDetails = () => {
           color="primary"
           onClick={() => window.open(lesson.materialUrl, "_blank")}
         >
-          ҚМЖ-ны жүктеу
+          ҚМЖ жүктеу
         </Button>
-      </Box>
-
-      <Box sx={{ mb: 5 }}>
-        <iframe
-          src={lesson.materialUrl}
-          width="100%"
-          height="600px"
-          style={{ borderRadius: "8px", border: "1px solid #ccc" }}
-          allow="autoplay"
-        ></iframe>
       </Box>
 
     </Container>
