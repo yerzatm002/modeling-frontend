@@ -3,6 +3,8 @@ import axios from "axios";
 // Базовый URL сервера
 const API_URL = "https://modeling-backend-bwx3.onrender.com/api";
 
+// const API_URL = "http://localhost:5000/api";
+
 // Создаем экземпляр Axios
 const api = axios.create({
   baseURL: API_URL,
